@@ -13,7 +13,7 @@ This is a simple Flask app that receives GitHub webhook events (push, pull reque
 ## How to run
 1. Install requirements: `pip install -r requirements.txt`
 2. Set up your `.env` file with your MongoDB URI (e.g. `MONGODB_URI=mongodb://localhost:27017/webhook_github`)
-3. Start the app: `python app.py`
+3. Start the app: `python run.py`
 4. If you want to test GitHub webhooks from your local machine, use [ngrok](https://ngrok.com/):
    - Download and install ngrok
    - Run `ngrok http 5000` in a separate terminal
