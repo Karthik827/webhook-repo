@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub Webhook Events</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>GitHub Webhook Events</h1>
+    <div id="events"/div>
+    <script>
+        function fetchEvents() {
+            fetch('/webhook/events')
+                .then(response => response.json())
+                .then(events => {
+                    const eventsDiv = document.getElementById('events');
+                    eventsDiv.innerHTML = '';
+                    events.forEach(event => {
+                        let message = event.message;
+                        if (!message) {
+                            if (event.action === 'PUSH') {
+                                message = `${event.author} pushed to ${event.to_branch} on ${event.timestamp}`;
+                            } else if (event.action === 'PULL_REQUEST') {
+                                message = `${event.author} submitted a pull request from ${event.from_branch} to ${event.to_branch} on ${event.timestamp}`;
+                            } else if (event.action === 'MERGE') {
+                                message = `${event.author} merged branch ${event.from_branch} to ${event.to_branch} on ${event.timestamp}`;
+                            } else {
+                                message = JSON.stringify(event);
+                            }
+                        }
+                        const p = document.createElement('p');
+                        p.textContent = message;
+                        eventsDiv.appendChild(p);
+                    });
+                });
+        }
+
+        // Initial fetch
+        fetchEvents();
+        // Poll every 15 seconds
+        setInterval(fetchEvents, 15000);
+    </script>
+</body>
+</html>
